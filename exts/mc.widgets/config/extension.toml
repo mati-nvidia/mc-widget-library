@@ -1,0 +1,46 @@
+[package]
+# Semantic Versionning is used: https://semver.org/
+version = "1.0.0"
+
+# The title and description fields are primarily for displaying extension info in UI
+title = "Simple UI Extension Template"
+description="The simplest python extension example. Use it as a starting point for your extensions."
+
+# Path (relative to the root) or content of readme markdown file for UI.
+readme  = "docs/README.md"
+
+# URL of the extension source repository.
+repository = ""
+
+# One of categories for UI.
+category = "Example"
+
+# Keywords for the extension
+keywords = ["kit", "example"]
+
+
+# Use omni.ui to build simple UI
+[dependencies]
+"omni.kit.uiapp" = {}
+
+# Main python module this extension provides, it will be publicly available as "import omni.hello.world".
+[[python.module]]
+name = "mc.widgets"
+
+[python.pipapi]
+# List of additional directories with pip achives to be passed into pip using ``--find-links`` arg.
+# Relative paths are relative to extension root. Tokens can be used.
+# archiveDirs = ["path/to/pip_archive"]
+
+# Commands passed to pip install before extension gets enabled. Can also contain flags, like `--upgrade`, `--no--index`, etc.
+# Refer to: https://pip.pypa.io/en/stable/reference/pip_install/#requirements-file-format
+requirements = [
+    "fontawesome"
+]
+
+# Allow going to online index if package can't be found locally (not recommended)
+use_online_index = true
+
+# Use this to specify a list of additional repositories if your pip package is hosted somewhere other
+# than the default repo(s) configured in pip. Will pass these to pip with "--extra-index-url" argument
+# repositories = ["https://my.additional.pip_repo.com/"]
