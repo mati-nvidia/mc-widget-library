@@ -1,7 +1,6 @@
 import omni.ext
 import omni.ui as ui
 from .demo import DemoWindow
-
 import carb
 
 # Any class derived from `omni.ext.IExt` in top level module (defined in `python.modules` of `extension.toml`) will be

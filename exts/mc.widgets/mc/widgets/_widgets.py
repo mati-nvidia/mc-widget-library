@@ -1,9 +1,10 @@
+from abc import abstractmethod
 from functools import partial
 from typing import List
 
 import carb
 import omni.ui as ui
-from .styles import checkbox_group_style
+from . import styles
 
 class CheckBoxGroupModel:
     def __init__(self, option_names:List):
@@ -59,7 +60,7 @@ class CheckBoxGroup:
         self._build_widget()
 
     def _build_widget(self):
-        with ui.VStack(width=0, height=0, style=checkbox_group_style):
+        with ui.VStack(width=0, height=0, style=styles.checkbox_group_style):
             ui.Label(f"{self.group_name}:")
             for option in self.model.get_checkbox_options():
                 with ui.HStack(name="checkbox_row", width=0, height=0):
@@ -68,3 +69,67 @@ class CheckBoxGroup:
     
     def destroy(self):
         self.model.destroy()
+
+class BaseTab:
+    def __init__(self, name):
+        self.name = name
+    
+    def build_fn(self):
+        """Builds the contents for the tab.
+
+        You must implement this function with the UI contruction code that you want for
+        you tab. This is set to be called by a ui.Frame so it must have only a single
+        top-level widget.
+        """
+        raise NotImplementedError("You must implement Tab.build_fn")
+
+class TabGroup:
+    def __init__(self, tabs: List[BaseTab]):
+        self.frame = ui.Frame(build_fn=self._build_widget)
+        if not tabs:
+            raise ValueError("You must provide at least one BaseTab object.")
+        self.tabs = tabs
+        self.tab_containers = []
+        self.tab_headers = []
+    
+    def _build_widget(self):
+        with ui.ZStack():
+            ui.Rectangle(style={"background_color":ui.color.gray, "border_color":ui.color.white, "border_width":0.5})
+            with ui.VStack(style=styles.tab_group_style):
+                with ui.Frame(name="tab_row"):
+                    with ui.HStack(height=0, spacing=4):
+                        for x, tab in enumerate(self.tabs):
+                            with ui.ZStack(width=0):
+                                rect = ui.Rectangle(style_type_name_override="Tab", style={"corner_flag": ui.CornerFlag.TOP, "border_radius": 2})
+                                rect.set_mouse_released_fn(partial(self._tab_clicked, x))
+                                self.tab_headers.append(rect)
+                                ui.Label(tab.name)
+                with ui.ZStack():
+                    for x, tab in enumerate(self.tabs):
+                        container_frame = ui.Frame(build_fn=tab.build_fn)
+                        self.tab_containers.append(container_frame)
+                        container_frame.visible = False
+        
+        # Initialize first tab
+        self.select_tab(0)
+    
+    def select_tab(self, index: int):
+        for x in range(len(self.tabs)):
+            if x == index:
+                self.tab_containers[x].visible = True
+                self.tab_headers[x].selected = True
+            else:
+                self.tab_containers[x].visible = False
+                self.tab_headers[x].selected = False
+    
+    def _tab_clicked(self, index, x, y, button, modifier):
+        print(f"Index: {index}, X:{x}, Y:{y}, Button:{button}, Modifier:{modifier}")
+        if button == 0:
+            self.select_tab(index)
+    
+    def append_tab(self, tab: BaseTab):
+        pass
+    
+    def destroy(self):
+        self.frame.destroy()
+
