@@ -11,14 +11,32 @@ checkbox_group_style = {
 }
 
 tab_group_style = {
-    "Frame::tab_row" : {
-        "background_color": ui.color.blue,
-        "color": ui.color.blue
+    "TabGroupBorder": {
+        "background_color": ui.color.transparent,
+        "border_color": ui.color(25), 
+        "border_width": 1
     },
-    "Tab": {
-        "background_color": ui.color.cyan,
+    "Rectangle::TabGroupHeader" : {
+        "background_color": ui.color(20),
     },
-    "Tab:selected": {
-        "background_color": ui.color.green,
+    "ZStack::TabGroupHeader":{
+        "margin_width": 1
+    }
+}
+
+tab_style = {
+    "" : {
+        "background_color": ui.color(31),
+        "corner_flag": ui.CornerFlag.TOP, 
+        "border_radius": 4,
+        "color": ui.color(127)
+    },
+    ":selected": {
+        "background_color": ui.color(56),
+        "color": ui.color(203)
+    },
+    "Label": {
+        "margin_width": 5,
+        "margin_height": 3
     }
 }

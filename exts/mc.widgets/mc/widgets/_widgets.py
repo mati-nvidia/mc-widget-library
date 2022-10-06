@@ -77,7 +77,7 @@ class BaseTab:
     def build_fn(self):
         """Builds the contents for the tab.
 
-        You must implement this function with the UI contruction code that you want for
+        You must implement this function with the UI construction code that you want for
         you tab. This is set to be called by a ui.Frame so it must have only a single
         top-level widget.
         """
@@ -93,17 +93,22 @@ class TabGroup:
         self.tab_headers = []
     
     def _build_widget(self):
-        with ui.ZStack():
-            ui.Rectangle(style={"background_color":ui.color.gray, "border_color":ui.color.white, "border_width":0.5})
-            with ui.VStack(style=styles.tab_group_style):
-                with ui.Frame(name="tab_row"):
-                    with ui.HStack(height=0, spacing=4):
-                        for x, tab in enumerate(self.tabs):
-                            with ui.ZStack(width=0):
-                                rect = ui.Rectangle(style_type_name_override="Tab", style={"corner_flag": ui.CornerFlag.TOP, "border_radius": 2})
-                                rect.set_mouse_released_fn(partial(self._tab_clicked, x))
-                                self.tab_headers.append(rect)
-                                ui.Label(tab.name)
+        with ui.ZStack(style=styles.tab_group_style):
+            ui.Rectangle(style_type_name_override="TabGroupBorder")
+            with ui.VStack():
+                ui.Spacer(height=1)
+                with ui.ZStack(height=0, name="TabGroupHeader"):
+                    ui.Rectangle(name="TabGroupHeader")
+                    with ui.VStack():
+                        ui.Spacer(height=2)
+                        with ui.HStack(height=0, spacing=4):
+                            for x, tab in enumerate(self.tabs):
+                                tab_header = ui.ZStack(width=0, style=styles.tab_style)
+                                self.tab_headers.append(tab_header)
+                                with tab_header:
+                                    rect = ui.Rectangle()
+                                    rect.set_mouse_released_fn(partial(self._tab_clicked, x))
+                                    ui.Label(tab.name)
                 with ui.ZStack():
                     for x, tab in enumerate(self.tabs):
                         container_frame = ui.Frame(build_fn=tab.build_fn)
@@ -123,7 +128,6 @@ class TabGroup:
                 self.tab_headers[x].selected = False
     
     def _tab_clicked(self, index, x, y, button, modifier):
-        print(f"Index: {index}, X:{x}, Y:{y}, Button:{button}, Modifier:{modifier}")
         if button == 0:
             self.select_tab(index)
     

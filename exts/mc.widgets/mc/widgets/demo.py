@@ -1,3 +1,4 @@
+from ctypes import alignment
 import carb
 import omni.ui as ui
 from ._widgets import CheckBoxGroup, CheckBoxGroupModel, TabGroup, BaseTab
@@ -30,20 +31,29 @@ class DemoWindow(ui.Window):
 
 class MyTab1(BaseTab):
     def build_fn(self):
-        with ui.VStack():
-            ui.Button("Hello")
+        with ui.VStack(style={"margin":5}):
+            ui.Label("Hello!", alignment=ui.Alignment.CENTER, height=25)
+            ui.Label("Check out this TabGroup Widget.", alignment=ui.Alignment.CENTER)
+            ui.Spacer(height=40)
 
 class MyTab2(BaseTab):
     def build_fn(self):
-        with ui.VStack():
-            ui.Label("Tab 2")
-            model = CheckBoxGroupModel(["Red", "Blue", "Green"])
-            cb_group = CheckBoxGroup("My CheckBox Group", model)
+        with ui.VStack(style={"margin":5}):
+            with ui.HStack(spacing=2):
+                color_model = ui.ColorWidget(0.125, 0.25, 0.5, width=0, height=0).model
+                for item in color_model.get_item_children():
+                    component = color_model.get_item_value_model(item)
+                    ui.FloatDrag(component)
 
 class MyTab3(BaseTab):
     def build_fn(self):
-        with ui.VStack():
-            ui.Label("Tab 3")
+        with ui.VStack(style={"margin":5}):
             with ui.HStack():
-                ui.Label("My String Field: ")
-                ui.StringField()
+                ui.Label("Red: ", height=25)
+                ui.FloatSlider()
+            with ui.HStack():
+                ui.Label("Green: ", height=25)
+                ui.FloatSlider()
+            with ui.HStack():
+                ui.Label("Blue: ", height=25)
+                ui.FloatSlider()

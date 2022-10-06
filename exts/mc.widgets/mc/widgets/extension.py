@@ -11,7 +11,7 @@ class MyExtension(omni.ext.IExt):
     # this extension is located on filesystem.
     def on_startup(self, ext_id):
         print("[mc.widgets] MyExtension startup")
-        self._window = DemoWindow("Demo Window 2", width=300, height=300)  
+        self._window = DemoWindow("Demo Window", width=300, height=300)  
         #settings = carb.settings.get_settings()
         # import fontawesome as fa
         # print(fa.icons['fa-python'])
