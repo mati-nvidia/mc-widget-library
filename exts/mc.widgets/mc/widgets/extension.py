@@ -1,7 +1,5 @@
 import omni.ext
-import omni.ui as ui
 from .demo import DemoWindow
-import carb
 
 # Any class derived from `omni.ext.IExt` in top level module (defined in `python.modules` of `extension.toml`) will be
 # instantiated when extension gets enabled and `on_startup(ext_id)` will be called. Later when extension gets disabled

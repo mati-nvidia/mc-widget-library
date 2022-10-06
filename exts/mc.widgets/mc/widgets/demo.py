@@ -1,4 +1,3 @@
-from ctypes import alignment
 import carb
 import omni.ui as ui
 from ._widgets import CheckBoxGroup, CheckBoxGroupModel, TabGroup, BaseTab
